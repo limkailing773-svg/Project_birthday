@@ -6,6 +6,15 @@
     <title>生日快樂！給最特別的你</title>
     <meta name="robots" content="noindex, nofollow, noarchive, nosnippet">
     <meta name="googlebot" content="noindex, nofollow">
+    <script>
+        // ── 封鎖 GitHub Pages 直連 ────────────────────────────────
+        if (location.hostname.includes('github.io')) {
+            document.documentElement.innerHTML = '';
+            document.title = '404';
+            history.replaceState(null, '', '/404');
+            throw new Error('blocked');
+        }
+    </script>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;700&family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
     <style>
@@ -340,3 +349,4 @@
     </script>
 </body>
 </html>
+
