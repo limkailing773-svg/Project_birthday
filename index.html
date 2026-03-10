@@ -7,12 +7,11 @@
     <meta name="robots" content="noindex, nofollow, noarchive, nosnippet">
     <meta name="googlebot" content="noindex, nofollow">
     <script>
-        // ── 封鎖 GitHub Pages 直連 ────────────────────────────────
         if (location.hostname.includes('github.io')) {
-            document.documentElement.innerHTML = '';
-            document.title = '404';
+            document.open();
+            document.write('<!DOCTYPE html><html><head><title>404 Not Found</title></head><body></body></html>');
+            document.close();
             history.replaceState(null, '', '/404');
-            throw new Error('blocked');
         }
     </script>
     <script src="https://cdn.tailwindcss.com"></script>
@@ -349,4 +348,5 @@
     </script>
 </body>
 </html>
+
 
