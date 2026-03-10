@@ -98,13 +98,15 @@
     </main>
 
     <script>
-        // ── 密碼鎖 ────────────────────────────────────────────────
-        const CORRECT_PWD = 'Mo@2025#BiRtHdAy!xK9$pZ&nQ7*';
+        // ── 密碼鎖（SHA-256 雜湊比對）────────────────────────────
+        const _PWD_HASH = '1a753a99d885a22fa56a0ed936f068e74301f09a4e93bc2118a4e128a72ee8e2';
         let attempts = 0;
-        function checkPassword() {
+        async function checkPassword() {
             const val = document.getElementById('pwd-input').value;
             const err = document.getElementById('lock-error');
-            if (val === CORRECT_PWD) {
+            const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(val));
+            const h = Array.from(new Uint8Array(buf)).map(x=>x.toString(16).padStart(2,'0')).join('');
+            if (h === _PWD_HASH) {
                 document.getElementById('lock-screen').style.display = 'none';
             } else {
                 attempts++;
@@ -118,9 +120,9 @@
             });
         });
 
-        // ── 圖片資料 ──────────────────────────────────────────────
-        const BIRTHDAY_DATE = new Date(2025, 4, 20, 0, 0, 0);
-        const R2 = 'https://birthday-proxy.limkailing773.workers.dev/images';
+        // ── 圖片資料（R2 混淆）───────────────────────────────────
+        const BIRTHDAY_DATE = new Date(2025, 2, 23, 0, 0, 0);
+        const R2 = [atob('aHR0cHM6Ly8='),atob('YmlydGhkYXktcHJveHku'),atob('bGlta2FpbGluZzc3Mw=='),atob('LndvcmtlcnMuZGV2'),atob('L2ltYWdlcw==')].join('');
         document.getElementById('avatar-img').src = `${R2}/IMG_2421.JPG`;
         const flashImages = [
             `${R2}/IDG_20251220_214506_562.JPG`,
