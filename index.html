@@ -4,25 +4,27 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>生日快樂！給最特別的你</title>
+    <meta name="robots" content="noindex, nofollow, noarchive, nosnippet">
+    <meta name="googlebot" content="noindex, nofollow">
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;700&family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
     <style>
         :root { --primary-pink: #ff85a2; --secondary-gold: #f6d365; --text-color: #4a4a4a; }
         body { font-family: 'Noto Sans SC', sans-serif; color: var(--text-color); overflow: hidden; background-color: #fff5f7; }
-        #lock-screen { position: fixed; inset: 0; z-index: 9999; background: linear-gradient(135deg, #fff0f5 0%, #ffe4f0 100%); display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 24px; }
+        .cursive { font-family: 'Dancing Script', cursive; }
+        #effect-canvas { position: fixed; top: 0; left: 0; z-index: 0; pointer-events: none; }
+        #lock-screen { position: fixed; inset: 0; z-index: 9999; background: linear-gradient(135deg,#fff0f5,#ffe4f0); display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 20px; }
         #lock-screen h2 { font-size: 2rem; font-weight: 700; background: linear-gradient(120deg,#f093fb,#f5576c); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        #lock-screen p { color: #888; font-size: 0.85rem; }
+        #lock-screen p { color: #aaa; font-size: 0.82rem; }
         #pwd-input { width: 320px; padding: 14px 18px; border: 2px solid #ffb3cc; border-radius: 999px; font-size: 1rem; text-align: center; outline: none; letter-spacing: 2px; background: rgba(255,255,255,0.8); transition: border-color .3s; }
         #pwd-input:focus { border-color: #ff85a2; }
         #unlock-btn { padding: 12px 40px; background: #ff85a2; color: #fff; border: none; border-radius: 999px; font-size: 1rem; cursor: pointer; transition: background .2s, transform .1s; }
         #unlock-btn:hover { background: #f5576c; transform: scale(1.05); }
         #lock-error { color: #f5576c; font-size: 0.85rem; min-height: 1.2em; }
-        .cursive { font-family: 'Dancing Script', cursive; }
-        #effect-canvas { position: fixed; top: 0; left: 0; z-index: 0; pointer-events: none; }
         #firework-canvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; pointer-events: none; }
-        .glass { background: rgba(255, 255, 255, 0.7); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.3); border-radius: 20px; }
+        .glass { background: rgba(255,255,255,0.7); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.3); border-radius: 20px; }
         .text-gradient { background: linear-gradient(120deg, #f093fb 0%, #f5576c 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        @keyframes float { 0% { transform: translateY(0px); } 50% { transform: translateY(-20px); } 100% { transform: translateY(0px); } }
+        @keyframes float { 0%,100% { transform: translateY(0px); } 50% { transform: translateY(-20px); } }
         .animate-float { animation: float 4s ease-in-out infinite; }
         .flash-item { position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0; transition: opacity 1s ease-in-out; display: flex; justify-content: center; align-items: center; background: #000; }
         .flash-item.active { opacity: 1; }
@@ -31,7 +33,7 @@
     </style>
 </head>
 <body>
-    <!-- 密碼鎖頁面 -->
+    <!-- 密碼鎖 -->
     <div id="lock-screen">
         <div style="font-size:3rem">🔐</div>
         <h2>輸入密碼以繼續</h2>
@@ -42,6 +44,7 @@
     </div>
 
     <canvas id="effect-canvas"></canvas>
+
     <div class="fixed top-6 right-6 z-50">
         <button id="music-btn" class="p-3 glass rounded-full shadow-lg hover:scale-110 transition-transform">
             <span id="music-icon">🎵</span>
@@ -50,7 +53,9 @@
             <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
         </audio>
     </div>
+
     <main class="relative z-10 w-full h-screen">
+        <!-- 首頁 -->
         <section id="home-view" class="view-section active justify-center items-center px-6 text-center">
             <div class="animate-float mb-8">
                 <div class="w-40 h-40 md:w-56 md:h-56 rounded-full border-8 border-white shadow-2xl overflow-hidden mx-auto">
@@ -69,12 +74,16 @@
                 <button onclick="startFlashShow()" class="bg-pink-500 text-white px-8 py-3 rounded-full shadow-lg hover:bg-pink-600 transition-colors">開啟時光機</button>
             </div>
         </section>
+
+        <!-- 時光機 -->
         <section id="flash-view" class="view-section relative bg-black overflow-hidden">
             <div id="flash-container" class="w-full h-full"></div>
             <div id="flash-finish-btn" class="absolute bottom-20 left-1/2 -translate-x-1/2 z-20 hidden">
                 <button onclick="showFinalPage()" class="bg-white text-pink-600 px-10 py-4 rounded-full font-bold shadow-2xl hover:scale-105 transition-transform">點！ ➔</button>
             </div>
         </section>
+
+        <!-- 結尾頁 -->
         <section id="final-view" class="view-section relative justify-center items-center bg-gray-900 text-center px-6 overflow-hidden">
             <canvas id="firework-canvas"></canvas>
             <div class="max-w-2xl relative z-10">
@@ -86,11 +95,11 @@
             </div>
         </section>
     </main>
+
     <script>
         // ── 密碼鎖 ────────────────────────────────────────────────
-        const CORRECT_PWD = 'Mo@2025#BiRtHdAy!xK9$pZ&nQ7*';  // ← 可自行修改
+        const CORRECT_PWD = 'Mo@2025#BiRtHdAy!xK9$pZ&nQ7*';
         let attempts = 0;
-
         function checkPassword() {
             const val = document.getElementById('pwd-input').value;
             const err = document.getElementById('lock-error');
@@ -99,78 +108,65 @@
             } else {
                 attempts++;
                 document.getElementById('pwd-input').value = '';
-                err.innerText = attempts >= 3
-                    ? `密碼錯誤（已嘗試 ${attempts} 次），請確認後再試`
-                    : '密碼錯誤，請再試一次';
+                err.innerText = attempts >= 3 ? `密碼錯誤（已嘗試 ${attempts} 次），請確認後再試` : '密碼錯誤，請再試一次';
             }
         }
-
-        // Enter 鍵觸發
-        document.getElementById('pwd-input').addEventListener('keydown', e => {
-            if (e.key === 'Enter') checkPassword();
+        document.addEventListener('DOMContentLoaded', () => {
+            document.getElementById('pwd-input').addEventListener('keydown', e => {
+                if (e.key === 'Enter') checkPassword();
+            });
         });
 
-        // ── 倒數計時 ──────────────────────────────────────────────
+        // ── 圖片資料 ──────────────────────────────────────────────
+        const BIRTHDAY_DATE = new Date(2025, 4, 20, 0, 0, 0);
         const R2 = 'https://birthday-proxy.limkailing773.workers.dev/images';
         const flashImages = [
             `${R2}/IDG_20251220_214506_562.JPG`,
             `${R2}/IDG_20260110_164620_835.JPG`,
             `${R2}/IDG_20260227_101519_019.JPG`,
             `${R2}/IDG_20260227_153707_409.JPG`,
-            `${R2}/IMG_2421.JPG`,
-            `${R2}/IMG_2490.JPG`,
-            `${R2}/IMG_2550.JPG`,
-            `${R2}/IMG_2723.JPG`,
-            `${R2}/IMG_2825.JPG`,
-            `${R2}/IMG_2998.JPG`,
-            `${R2}/IMG_3014.JPG`,
-            `${R2}/IMG_3081.JPG`,
-            `${R2}/IMG_4691.JPG`,
-            `${R2}/IMG_4763.jpg`,
-            `${R2}/IMG_5090.JPG`,
-            `${R2}/IMG_5185.JPG`,
-            `${R2}/IMG_5256.JPG`,
-            `${R2}/IMG_5287.JPG`,
-            `${R2}/IMG_5330.JPG`,
-            `${R2}/IMG_5409.JPG`,
-            `${R2}/IMG_5421.JPG`,
-            `${R2}/IMG_5481.JPG`,
-            `${R2}/IMG_5495.JPG`,
-            `${R2}/IMG_5593.JPG`,
-            `${R2}/IMG_5599.JPG`,
-            `${R2}/IMG_5614.JPG`,
-            `${R2}/IMG_5637.JPG`,
-            `${R2}/IMG_5704.JPG`,
-            `${R2}/IMG_6185.JPG`,
-            `${R2}/IMG_6225.JPG`,
-            `${R2}/IMG_6913.JPG`,
-            `${R2}/IMG_6946.JPG`,
-            `${R2}/IMG_7034.JPG`,
-            `${R2}/IMG_7098.JPG`,
-            `${R2}/IMG_7189.JPG`,
-            `${R2}/IMG_7306.JPG`,
-            `${R2}/IMG_7364.JPG`,
-            `${R2}/IMG_7974.JPG`,
-            `${R2}/IMG_7903.JPG`,
-            `${R2}/IMG_7666.JPG`
+            `${R2}/IMG_2421.JPG`,  `${R2}/IMG_2490.JPG`,
+            `${R2}/IMG_2550.JPG`,  `${R2}/IMG_2723.JPG`,
+            `${R2}/IMG_2825.JPG`,  `${R2}/IMG_2998.JPG`,
+            `${R2}/IMG_3014.JPG`,  `${R2}/IMG_3081.JPG`,
+            `${R2}/IMG_4691.JPG`,  `${R2}/IMG_4763.jpg`,
+            `${R2}/IMG_5090.JPG`,  `${R2}/IMG_5185.JPG`,
+            `${R2}/IMG_5256.JPG`,  `${R2}/IMG_5287.JPG`,
+            `${R2}/IMG_5330.JPG`,  `${R2}/IMG_5409.JPG`,
+            `${R2}/IMG_5421.JPG`,  `${R2}/IMG_5481.JPG`,
+            `${R2}/IMG_5495.JPG`,  `${R2}/IMG_5593.JPG`,
+            `${R2}/IMG_5599.JPG`,  `${R2}/IMG_5614.JPG`,
+            `${R2}/IMG_5637.JPG`,  `${R2}/IMG_5704.JPG`,
+            `${R2}/IMG_6185.JPG`,  `${R2}/IMG_6225.JPG`,
+            `${R2}/IMG_6913.JPG`,  `${R2}/IMG_6946.JPG`,
+            `${R2}/IMG_7034.JPG`,  `${R2}/IMG_7098.JPG`,
+            `${R2}/IMG_7189.JPG`,  `${R2}/IMG_7306.JPG`,
+            `${R2}/IMG_7364.JPG`,  `${R2}/IMG_7974.JPG`,
+            `${R2}/IMG_7903.JPG`,  `${R2}/IMG_7666.JPG`
         ];
 
+        // ── 倒數計時 ──────────────────────────────────────────────
         function updateCountdown() {
             const now = new Date();
             let diff = BIRTHDAY_DATE - now;
-            if (diff < 0) { BIRTHDAY_DATE.setFullYear(now.getFullYear() + (now.getMonth() > BIRTHDAY_DATE.getMonth() ? 1 : 0)); diff = BIRTHDAY_DATE - now; }
-            document.getElementById('days').innerText = Math.floor(diff / (1000 * 60 * 60 * 24)).toString().padStart(2, '0');
-            document.getElementById('hours').innerText = Math.floor((diff / (1000 * 60 * 60)) % 24).toString().padStart(2, '0');
-            document.getElementById('minutes').innerText = Math.floor((diff / (1000 * 60)) % 60).toString().padStart(2, '0');
-            document.getElementById('seconds').innerText = Math.floor((diff / 1000) % 60).toString().padStart(2, '0');
+            if (diff < 0) {
+                BIRTHDAY_DATE.setFullYear(now.getFullYear() + (now.getMonth() > BIRTHDAY_DATE.getMonth() ? 1 : 0));
+                diff = BIRTHDAY_DATE - now;
+            }
+            document.getElementById('days').innerText    = Math.floor(diff / 86400000).toString().padStart(2,'0');
+            document.getElementById('hours').innerText   = Math.floor(diff / 3600000 % 24).toString().padStart(2,'0');
+            document.getElementById('minutes').innerText = Math.floor(diff / 60000 % 60).toString().padStart(2,'0');
+            document.getElementById('seconds').innerText = Math.floor(diff / 1000 % 60).toString().padStart(2,'0');
         }
         setInterval(updateCountdown, 1000); updateCountdown();
 
+        // ── 頁面切換 ──────────────────────────────────────────────
         function switchView(id) {
             document.querySelectorAll('.view-section').forEach(s => s.classList.remove('active'));
             document.getElementById(id).classList.add('active');
         }
 
+        // ── 時光機 ────────────────────────────────────────────────
         function startFlashShow() {
             switchView('flash-view');
             const container = document.getElementById('flash-container');
@@ -184,7 +180,7 @@
             let idx = 0;
             const items = document.querySelectorAll('.flash-item');
             function showNext() {
-                if (idx > 0) items[idx - 1].classList.remove('active');
+                if (idx > 0) items[idx-1].classList.remove('active');
                 if (idx < items.length) { items[idx].classList.add('active'); idx++; setTimeout(showNext, 2000); }
                 else { document.getElementById('flash-finish-btn').classList.remove('hidden'); }
             }
@@ -193,20 +189,29 @@
 
         function showFinalPage() { switchView('final-view'); initFireworks(); }
 
+        // ── 音樂 ──────────────────────────────────────────────────
         const musicBtn = document.getElementById('music-btn');
         const audio = document.getElementById('bg-music');
         let isPlaying = false;
         musicBtn.addEventListener('click', () => {
-            if (isPlaying) { audio.pause(); document.getElementById('music-icon').innerText = '🔇'; }
-            else { audio.play(); document.getElementById('music-icon').innerText = '🎵'; }
+            isPlaying ? audio.pause() : audio.play();
             isPlaying = !isPlaying;
+            document.getElementById('music-icon').innerText = isPlaying ? '🎵' : '🔇';
         });
 
-        // ── Canvas 主體 ──────────────────────────────────────────
+        // ── Canvas 主體 ───────────────────────────────────────────
         const canvas = document.getElementById('effect-canvas');
         const ctx = canvas.getContext('2d');
         function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
         window.addEventListener('resize', resize); resize();
+
+        // 共用愛心路徑
+        function drawHeart(c, s) {
+            c.beginPath();
+            c.moveTo(0, 0);
+            c.bezierCurveTo(-s/2, -s/2, -s, s/3, 0, s);
+            c.bezierCurveTo(s, s/3, s/2, -s/2, 0, 0);
+        }
 
         // 飄落愛心（背景）
         class FallHeart {
@@ -224,12 +229,11 @@
             }
             draw() {
                 ctx.save(); ctx.globalAlpha = this.opacity; ctx.fillStyle = '#ff85a2';
-                ctx.translate(this.x, this.y);
-                drawHeart(ctx, this.size); ctx.fill(); ctx.restore();
+                ctx.translate(this.x, this.y); drawHeart(ctx, this.size); ctx.fill(); ctx.restore();
             }
         }
 
-        // 滑鼠/觸控尾跡愛心
+        // 滑鼠／觸控尾跡愛心
         class TrailHeart {
             constructor(x, y) {
                 this.x = x; this.y = y;
@@ -241,31 +245,20 @@
             }
             update() {
                 this.x += this.vx; this.y += this.vy;
-                this.vy += 0.05;           // 微重力
-                this.size -= 0.15;
-                this.opacity -= 0.025;
+                this.vy += 0.05; this.size -= 0.15; this.opacity -= 0.025;
             }
             draw() {
                 if (this.opacity <= 0 || this.size <= 0) return;
                 ctx.save(); ctx.globalAlpha = this.opacity; ctx.fillStyle = this.color;
-                ctx.translate(this.x, this.y);
-                drawHeart(ctx, this.size); ctx.fill(); ctx.restore();
+                ctx.translate(this.x, this.y); drawHeart(ctx, this.size); ctx.fill(); ctx.restore();
             }
             get dead() { return this.opacity <= 0 || this.size <= 0; }
-        }
-
-        // 共用愛心路徑函式
-        function drawHeart(c, s) {
-            c.beginPath();
-            c.moveTo(0, 0);
-            c.bezierCurveTo(-s/2, -s/2, -s, s/3, 0, s);
-            c.bezierCurveTo(s, s/3, s/2, -s/2, 0, 0);
         }
 
         const fallHearts = Array.from({ length: 30 }, () => new FallHeart());
         let trailHearts = [];
 
-        // 產生尾跡的節流控制（每 30ms 最多一批）
+        // 節流：每 30ms 最多生成一批
         let lastTrail = 0;
         function spawnTrail(x, y) {
             const now = Date.now();
@@ -274,10 +267,7 @@
             for (let i = 0; i < 3; i++) trailHearts.push(new TrailHeart(x, y));
         }
 
-        // 滑鼠事件
         window.addEventListener('mousemove', e => spawnTrail(e.clientX, e.clientY));
-
-        // 觸控事件（支援多點）
         window.addEventListener('touchmove', e => {
             e.preventDefault();
             Array.from(e.touches).forEach(t => spawnTrail(t.clientX, t.clientY));
@@ -286,9 +276,7 @@
         // 主渲染迴圈
         function animate() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
-            // 飄落背景
             fallHearts.forEach(h => { h.update(); h.draw(); });
-            // 尾跡（更新 + 過濾死亡粒子）
             trailHearts = trailHearts.filter(h => { h.update(); h.draw(); return !h.dead; });
             requestAnimationFrame(animate);
         }
@@ -302,10 +290,16 @@
         function initFireworks() {
             fwCanvas.width = window.innerWidth; fwCanvas.height = window.innerHeight;
             animateFireworks();
-            setInterval(() => { if (document.getElementById('final-view').classList.contains('active')) createFirework(); }, 1000);
+            setInterval(() => {
+                if (document.getElementById('final-view').classList.contains('active')) createFirework();
+            }, 1000);
         }
         function createFirework() {
-            fireworks.push({ x: Math.random() * fwCanvas.width, y: fwCanvas.height, targetY: Math.random() * fwCanvas.height / 2, color: `hsl(${Math.random()*360},100%,50%)`, speed: 5 });
+            fireworks.push({
+                x: Math.random() * fwCanvas.width, y: fwCanvas.height,
+                targetY: Math.random() * fwCanvas.height / 2,
+                color: `hsl(${Math.random()*360},100%,50%)`, speed: 5
+            });
         }
         function explode(x, y, color) {
             for (let i = 0; i < 50; i++) {
@@ -318,12 +312,15 @@
             fwCtx.fillStyle = 'rgba(17,24,39,0.2)'; fwCtx.fillRect(0, 0, fwCanvas.width, fwCanvas.height);
             fireworks.forEach((fw, i) => {
                 fw.y -= fw.speed;
-                fwCtx.beginPath(); fwCtx.arc(fw.x, fw.y, 2, 0, Math.PI*2); fwCtx.fillStyle = fw.color; fwCtx.fill();
+                fwCtx.beginPath(); fwCtx.arc(fw.x, fw.y, 2, 0, Math.PI*2);
+                fwCtx.fillStyle = fw.color; fwCtx.fill();
                 if (fw.y <= fw.targetY) { explode(fw.x, fw.y, fw.color); fireworks.splice(i, 1); }
             });
             fwParticles.forEach((p, i) => {
                 p.x += p.vx; p.y += p.vy; p.vy += 0.05; p.alpha -= p.decay;
-                fwCtx.save(); fwCtx.globalAlpha = p.alpha; fwCtx.beginPath(); fwCtx.arc(p.x, p.y, 1.5, 0, Math.PI*2); fwCtx.fillStyle = p.color; fwCtx.fill(); fwCtx.restore();
+                fwCtx.save(); fwCtx.globalAlpha = p.alpha;
+                fwCtx.beginPath(); fwCtx.arc(p.x, p.y, 1.5, 0, Math.PI*2);
+                fwCtx.fillStyle = p.color; fwCtx.fill(); fwCtx.restore();
                 if (p.alpha <= 0) fwParticles.splice(i, 1);
             });
             requestAnimationFrame(animateFireworks);
