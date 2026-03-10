@@ -57,7 +57,6 @@
     <main class="relative z-10 w-full h-screen">
         <!-- 首頁 -->
         <section id="home-view" class="view-section active justify-center items-center px-6 text-center">
-
             <div class="animate-float mb-8">
                 <div class="w-40 h-40 md:w-56 md:h-56 rounded-full border-8 border-white shadow-2xl overflow-hidden mx-auto">
                     <img id="avatar-img" alt="❤️" class="w-full h-full object-cover">
@@ -108,6 +107,10 @@
             const h = Array.from(new Uint8Array(buf)).map(x=>x.toString(16).padStart(2,'0')).join('');
             if (h === _PWD_HASH) {
                 document.getElementById('lock-screen').style.display = 'none';
+                // ✅ 解鎖後才初始化 R2 及圖片，密碼輸入前 Elements 面板看不到任何網址
+                const R2 = [atob('aHR0cHM6Ly8='),atob('YmlydGhkYXktcHJveHku'),atob('bGlta2FpbGluZzc3Mw=='),atob('LndvcmtlcnMuZGV2'),atob('L2ltYWdlcw==')].join('');
+                window._R2 = R2;
+                loadImg(document.getElementById('avatar-img'), `${R2}/IMG_2421.JPG`);
             } else {
                 attempts++;
                 document.getElementById('pwd-input').value = '';
@@ -120,10 +123,7 @@
             });
         });
 
-        // ── 圖片資料（R2 混淆）───────────────────────────────────
-        const BIRTHDAY_DATE = new Date(2025, 2, 23, 0, 0, 0);
-        const R2 = [atob('aHR0cHM6Ly8='),atob('YmlydGhkYXktcHJveHku'),atob('bGlta2FpbGluZzc3Mw=='),atob('LndvcmtlcnMuZGV2'),atob('L2ltYWdlcw==')].join('');
-        // 用 fetch + blob 隱藏真實圖片網址
+        // ── 用 fetch + blob 隱藏真實圖片網址 ─────────────────────
         async function loadImg(el, url) {
             try {
                 const res = await fetch(url);
@@ -132,33 +132,37 @@
             } catch { el.src = url; }
         }
 
-        loadImg(document.getElementById('avatar-img'), `${R2}/IMG_2421.JPG`);
-        const flashImages = [
-            `${R2}/IDG_20251220_214506_562.JPG`,
-            `${R2}/IDG_20260110_164620_835.JPG`,
-            `${R2}/IDG_20260227_101519_019.JPG`,
-            `${R2}/IDG_20260227_153707_409.JPG`,
-            `${R2}/IMG_2421.JPG`,  `${R2}/IMG_2490.JPG`,
-            `${R2}/IMG_2550.JPG`,  `${R2}/IMG_2723.JPG`,
-            `${R2}/IMG_2825.JPG`,  `${R2}/IMG_2998.JPG`,
-            `${R2}/IMG_3014.JPG`,  `${R2}/IMG_3081.JPG`,
-            `${R2}/IMG_4691.JPG`,  `${R2}/IMG_4763.jpg`,
-            `${R2}/IMG_5090.JPG`,  `${R2}/IMG_5185.JPG`,
-            `${R2}/IMG_5256.JPG`,  `${R2}/IMG_5287.JPG`,
-            `${R2}/IMG_5330.JPG`,  `${R2}/IMG_5409.JPG`,
-            `${R2}/IMG_5421.JPG`,  `${R2}/IMG_5481.JPG`,
-            `${R2}/IMG_5495.JPG`,  `${R2}/IMG_5593.JPG`,
-            `${R2}/IMG_5599.JPG`,  `${R2}/IMG_5614.JPG`,
-            `${R2}/IMG_5637.JPG`,  `${R2}/IMG_5704.JPG`,
-            `${R2}/IMG_6185.JPG`,  `${R2}/IMG_6225.JPG`,
-            `${R2}/IMG_6913.JPG`,  `${R2}/IMG_6946.JPG`,
-            `${R2}/IMG_7034.JPG`,  `${R2}/IMG_7098.JPG`,
-            `${R2}/IMG_7189.JPG`,  `${R2}/IMG_7306.JPG`,
-            `${R2}/IMG_7364.JPG`,  `${R2}/IMG_7974.JPG`,
-            `${R2}/IMG_7903.JPG`,  `${R2}/IMG_7666.JPG`
-        ];
+        // ── 圖片清單（解鎖後才透過 window._R2 取得）─────────────
+        function getFlashImages() {
+            const R2 = window._R2;
+            return [
+                `${R2}/IDG_20251220_214506_562.JPG`,
+                `${R2}/IDG_20260110_164620_835.JPG`,
+                `${R2}/IDG_20260227_101519_019.JPG`,
+                `${R2}/IDG_20260227_153707_409.JPG`,
+                `${R2}/IMG_2421.JPG`,  `${R2}/IMG_2490.JPG`,
+                `${R2}/IMG_2550.JPG`,  `${R2}/IMG_2723.JPG`,
+                `${R2}/IMG_2825.JPG`,  `${R2}/IMG_2998.JPG`,
+                `${R2}/IMG_3014.JPG`,  `${R2}/IMG_3081.JPG`,
+                `${R2}/IMG_4691.JPG`,  `${R2}/IMG_4763.jpg`,
+                `${R2}/IMG_5090.JPG`,  `${R2}/IMG_5185.JPG`,
+                `${R2}/IMG_5256.JPG`,  `${R2}/IMG_5287.JPG`,
+                `${R2}/IMG_5330.JPG`,  `${R2}/IMG_5409.JPG`,
+                `${R2}/IMG_5421.JPG`,  `${R2}/IMG_5481.JPG`,
+                `${R2}/IMG_5495.JPG`,  `${R2}/IMG_5593.JPG`,
+                `${R2}/IMG_5599.JPG`,  `${R2}/IMG_5614.JPG`,
+                `${R2}/IMG_5637.JPG`,  `${R2}/IMG_5704.JPG`,
+                `${R2}/IMG_6185.JPG`,  `${R2}/IMG_6225.JPG`,
+                `${R2}/IMG_6913.JPG`,  `${R2}/IMG_6946.JPG`,
+                `${R2}/IMG_7034.JPG`,  `${R2}/IMG_7098.JPG`,
+                `${R2}/IMG_7189.JPG`,  `${R2}/IMG_7306.JPG`,
+                `${R2}/IMG_7364.JPG`,  `${R2}/IMG_7974.JPG`,
+                `${R2}/IMG_7903.JPG`,  `${R2}/IMG_7666.JPG`
+            ];
+        }
 
         // ── 倒數計時 ──────────────────────────────────────────────
+        const BIRTHDAY_DATE = new Date(2025, 2, 23, 0, 0, 0);
         function updateCountdown() {
             const now = new Date();
             let diff = BIRTHDAY_DATE - now;
@@ -184,7 +188,7 @@
             switchView('flash-view');
             const container = document.getElementById('flash-container');
             container.innerHTML = '';
-            flashImages.forEach(src => {
+            getFlashImages().forEach(src => {
                 const div = document.createElement('div');
                 div.className = 'flash-item';
                 div.innerHTML = `<img class="max-w-[90%] max-h-[90vh] object-contain shadow-2xl border-2 border-white">`;
@@ -219,7 +223,6 @@
         function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
         window.addEventListener('resize', resize); resize();
 
-        // 共用愛心路徑
         function drawHeart(c, s) {
             c.beginPath();
             c.moveTo(0, 0);
@@ -227,7 +230,6 @@
             c.bezierCurveTo(s, s/3, s/2, -s/2, 0, 0);
         }
 
-        // 飄落愛心（背景）
         class FallHeart {
             constructor() { this.reset(); }
             reset() {
@@ -247,7 +249,6 @@
             }
         }
 
-        // 滑鼠／觸控尾跡愛心
         class TrailHeart {
             constructor(x, y) {
                 this.x = x; this.y = y;
@@ -271,8 +272,6 @@
 
         const fallHearts = Array.from({ length: 30 }, () => new FallHeart());
         let trailHearts = [];
-
-        // 節流：每 30ms 最多生成一批
         let lastTrail = 0;
         function spawnTrail(x, y) {
             const now = Date.now();
@@ -287,7 +286,6 @@
             Array.from(e.touches).forEach(t => spawnTrail(t.clientX, t.clientY));
         }, { passive: false });
 
-        // 主渲染迴圈
         function animate() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             fallHearts.forEach(h => { h.update(); h.draw(); });
@@ -342,4 +340,3 @@
     </script>
 </body>
 </html>
-
