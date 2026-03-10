@@ -36,11 +36,11 @@
         <section id="home-view" class="view-section active justify-center items-center px-6 text-center">
             <div class="animate-float mb-8">
                 <div class="w-40 h-40 md:w-56 md:h-56 rounded-full border-8 border-white shadow-2xl overflow-hidden mx-auto">
-                    <img src="images/IMG_2421.JPG" alt="壽星" class="w-full h-full object-cover" onerror="this.src='https://via.placeholder.com/400?text=IMG_2421.JPG'">
+                    <img src="images/IMG_2421.JPG" alt="❤️" class="w-full h-full object-cover" onerror="this.src='https://via.placeholder.com/400?text=IMG_2421.JPG'">
                 </div>
             </div>
             <h1 class="text-4xl md:text-6xl font-bold mb-4 text-gradient">祝你生日快樂!</h1>
-            <p class="text-xl md:text-2xl mb-8 cursive text-pink-500">To: 親愛的壽星</p>
+            <p class="text-xl md:text-2xl mb-8 cursive text-pink-500">To: 親愛的MONICA！！！</p>
             <div class="glass p-6 md:p-8 max-w-xl w-full grid grid-cols-4 gap-4 shadow-xl mx-auto">
                 <div><span id="days" class="block text-3xl font-bold text-pink-600">00</span><span class="text-sm">天</span></div>
                 <div><span id="hours" class="block text-3xl font-bold text-pink-600">00</span><span class="text-sm">時</span></div>
@@ -54,14 +54,14 @@
         <section id="flash-view" class="view-section relative bg-black overflow-hidden">
             <div id="flash-container" class="w-full h-full"></div>
             <div id="flash-finish-btn" class="absolute bottom-20 left-1/2 -translate-x-1/2 z-20 hidden">
-                <button onclick="showFinalPage()" class="bg-white text-pink-600 px-10 py-4 rounded-full font-bold shadow-2xl hover:scale-105 transition-transform">查看最終驚喜 ➔</button>
+                <button onclick="showFinalPage()" class="bg-white text-pink-600 px-10 py-4 rounded-full font-bold shadow-2xl hover:scale-105 transition-transform">點！ ➔</button>
             </div>
         </section>
         <section id="final-view" class="view-section relative justify-center items-center bg-gray-900 text-center px-6 overflow-hidden">
             <canvas id="firework-canvas"></canvas>
             <div class="max-w-2xl relative z-10">
                 <h2 class="text-6xl md:text-8xl font-bold text-gradient mb-8 drop-shadow-lg">HAPPY BIRTHDAY!</h2>
-                <div class="text-4xl md:text-6xl mb-12 animate-pulse">🎂✨🎁</div>
+                <div class="text-4xl md:text-6xl mb-12 animate-pulse">🎂</div>
                 <p class="text-xl md:text-2xl text-white leading-relaxed mb-10 opacity-90">在這個特別的日子裡，願你每一天都充滿陽光，每一刻都帶著微笑。<br>未來的日子裡，我們繼續創造更多美好的回憶。</p>
                 <div class="cursive text-4xl text-pink-400 drop-shadow-md">Love You Forever ❤️</div>
                 <button onclick="location.reload()" class="mt-16 text-gray-400 hover:text-pink-300 text-sm transition-colors">重新播放時光機</button>
@@ -69,49 +69,50 @@
         </section>
     </main>
     <script>
-        const BIRTHDAY_DATE = new Date(2025, 4, 20, 0, 0, 0); 
+        const BIRTHDAY_DATE = new Date(2025, 4, 20, 0, 0, 0);
         const flashImages = [
-            { src: 'images/IDG_20251220_214506_562.JPG', text: 'Memories' },
-            { src: 'images/IDG_20260110_164620_835.JPG', text: 'Memories' },
-            { src: 'images/IDG_20260227_101519_019.JPG', text: 'Memories' },
-            { src: 'images/IDG_20260227_153707_409.JPG', text: 'Memories' },
-            { src: 'images/IMG_2421.JPG', text: 'Memories' },
-            { src: 'images/IMG_2490.JPG', text: 'Memories' },
-            { src: 'images/IMG_2550.JPG', text: 'Memories' },
-            { src: 'images/IMG_2723.JPG', text: 'Memories' },
-            { src: 'images/IMG_2825.JPG', text: 'Memories' },
-            { src: 'images/IMG_2998.JPG', text: 'Memories' },
-            { src: 'images/IMG_3014.JPG', text: 'Memories' },
-            { src: 'images/IMG_3081.JPG', text: 'Memories' },
-            { src: 'images/IMG_4691.JPG', text: 'Memories' },
-            { src: 'images/IMG_4763.jpg', text: 'Memories' },
-            { src: 'images/IMG_5090.JPG', text: 'Memories' },
-            { src: 'images/IMG_5185.JPG', text: 'Memories' },
-            { src: 'images/IMG_5256.JPG', text: 'Memories' },
-            { src: 'images/IMG_5287.JPG', text: 'Memories' },
-            { src: 'images/IMG_5330.JPG', text: 'Memories' },
-            { src: 'images/IMG_5409.JPG', text: 'Memories' },
-            { src: 'images/IMG_5421.JPG', text: 'Memories' },
-            { src: 'images/IMG_5481.JPG', text: 'Memories' },
-            { src: 'images/IMG_5495.JPG', text: 'Memories' },
-            { src: 'images/IMG_5593.JPG', text: 'Memories' },
-            { src: 'images/IMG_5599.JPG', text: 'Memories' },
-            { src: 'images/IMG_5614.JPG', text: 'Memories' },
-            { src: 'images/IMG_5637.JPG', text: 'Memories' },
-            { src: 'images/IMG_5704.JPG', text: 'Memories' },
-            { src: 'images/IMG_6185.JPG', text: 'Memories' },
-            { src: 'images/IMG_6225.JPG', text: 'Memories' },
-            { src: 'images/IMG_6913.JPG', text: 'Memories' },
-            { src: 'images/IMG_6946.JPG', text: 'Memories' },
-            { src: 'images/IMG_7034.JPG', text: 'Memories' },
-            { src: 'images/IMG_7098.JPG', text: 'Memories' },
-            { src: 'images/IMG_7189.JPG', text: 'Memories' },
-            { src: 'images/IMG_7306.JPG', text: 'Memories' },
-            { src: 'images/IMG_7364.JPG', text: 'Memories' },
-            { src: 'images/IMG_7666.JPG', text: 'Memories' },
-            { src: 'images/IMG_7903.JPG', text: 'Memories' },
-            { src: 'images/IMG_7974.JPG', text: 'Memories' }
+            'images/IDG_20251220_214506_562.JPG',
+            'images/IDG_20260110_164620_835.JPG',
+            'images/IDG_20260227_101519_019.JPG',
+            'images/IDG_20260227_153707_409.JPG',
+            'images/IMG_2421.JPG',
+            'images/IMG_2490.JPG',
+            'images/IMG_2550.JPG',
+            'images/IMG_2723.JPG',
+            'images/IMG_2825.JPG',
+            'images/IMG_2998.JPG',
+            'images/IMG_3014.JPG',
+            'images/IMG_3081.JPG',
+            'images/IMG_4691.JPG',
+            'images/IMG_4763.jpg',
+            'images/IMG_5090.JPG',
+            'images/IMG_5185.JPG',
+            'images/IMG_5256.JPG',
+            'images/IMG_5287.JPG',
+            'images/IMG_5330.JPG',
+            'images/IMG_5409.JPG',
+            'images/IMG_5421.JPG',
+            'images/IMG_5481.JPG',
+            'images/IMG_5495.JPG',
+            'images/IMG_5593.JPG',
+            'images/IMG_5599.JPG',
+            'images/IMG_5614.JPG',
+            'images/IMG_5637.JPG',
+            'images/IMG_5704.JPG',
+            'images/IMG_6185.JPG',
+            'images/IMG_6225.JPG',
+            'images/IMG_6913.JPG',
+            'images/IMG_6946.JPG',
+            'images/IMG_7034.JPG',
+            'images/IMG_7098.JPG',
+            'images/IMG_7189.JPG',
+            'images/IMG_7306.JPG',
+            'images/IMG_7364.JPG',
+            'images/IMG_7666.JPG',
+            'images/IMG_7903.JPG',
+            'images/IMG_7974.JPG'
         ];
+
         function updateCountdown() {
             const now = new Date();
             let diff = BIRTHDAY_DATE - now;
@@ -122,29 +123,52 @@
             document.getElementById('seconds').innerText = Math.floor((diff / 1000) % 60).toString().padStart(2, '0');
         }
         setInterval(updateCountdown, 1000); updateCountdown();
-        function switchView(viewId) { document.querySelectorAll('.view-section').forEach(s => s.classList.remove('active')); document.getElementById(viewId).classList.add('active'); }
+
+        function switchView(viewId) {
+            document.querySelectorAll('.view-section').forEach(s => s.classList.remove('active'));
+            document.getElementById(viewId).classList.add('active');
+        }
+
         function startFlashShow() {
             switchView('flash-view');
             const container = document.getElementById('flash-container');
-            container.innerHTML = ''; 
-            flashImages.forEach((imgObj) => {
+            container.innerHTML = '';
+            flashImages.forEach(src => {
                 const div = document.createElement('div');
                 div.className = 'flash-item';
-                div.innerHTML = `<img src="${imgObj.src}" class="max-w-[90%] max-h-[80vh] object-contain shadow-2xl border-2 border-white mb-4"><div class="text-white text-center"><p class="text-lg opacity-80">${imgObj.text}</p></div>`;
+                div.innerHTML = `<img src="${src}" class="max-w-[90%] max-h-[90vh] object-contain shadow-2xl border-2 border-white">`;
                 container.appendChild(div);
             });
-            let currentIndex = 0; const items = document.querySelectorAll('.flash-item');
+            let currentIndex = 0;
+            const items = document.querySelectorAll('.flash-item');
             function showNext() {
                 if (currentIndex > 0) items[currentIndex - 1].classList.remove('active');
-                if (currentIndex < items.length) { items[currentIndex].classList.add('active'); currentIndex++; setTimeout(showNext, 2000); } 
-                else { document.getElementById('flash-finish-btn').classList.remove('hidden'); }
+                if (currentIndex < items.length) {
+                    items[currentIndex].classList.add('active');
+                    currentIndex++;
+                    setTimeout(showNext, 2000);
+                } else {
+                    document.getElementById('flash-finish-btn').classList.remove('hidden');
+                }
             }
-            setTimeout(showNext, 500); 
+            setTimeout(showNext, 500);
         }
+
         function showFinalPage() { switchView('final-view'); initFireworks(); }
-        const musicBtn = document.getElementById('music-btn'); const audio = document.getElementById('bg-music'); let isPlaying = false;
-        musicBtn.addEventListener('click', () => { if (isPlaying) { audio.pause(); document.getElementById('music-icon').innerText = '🔇'; } else { audio.play(); document.getElementById('music-icon').innerText = '🎵'; } isPlaying = !isPlaying; });
-        const canvas = document.getElementById('effect-canvas'); const ctx = canvas.getContext('2d'); let particles = [];
+
+        const musicBtn = document.getElementById('music-btn');
+        const audio = document.getElementById('bg-music');
+        let isPlaying = false;
+        musicBtn.addEventListener('click', () => {
+            if (isPlaying) { audio.pause(); document.getElementById('music-icon').innerText = '🔇'; }
+            else { audio.play(); document.getElementById('music-icon').innerText = '🎵'; }
+            isPlaying = !isPlaying;
+        });
+
+        // Falling hearts background
+        const canvas = document.getElementById('effect-canvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
         function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
         window.addEventListener('resize', resize); resize();
         class Heart {
@@ -156,11 +180,35 @@
         for (let i = 0; i < 30; i++) particles.push(new Heart());
         function animate() { ctx.clearRect(0, 0, canvas.width, canvas.height); particles.forEach(p => { p.update(); p.draw(); }); requestAnimationFrame(animate); }
         animate();
-        const fwCanvas = document.getElementById('firework-canvas'); const fwCtx = fwCanvas.getContext('2d'); let fireworks = []; let fireworkParticles = [];
-        function initFireworks() { fwCanvas.width = window.innerWidth; fwCanvas.height = window.innerHeight; animateFireworks(); setInterval(() => { if (document.getElementById('final-view').classList.contains('active')) createFirework(); }, 1000); }
-        function createFirework() { const x = Math.random() * fwCanvas.width; const y = fwCanvas.height; const targetY = Math.random() * (fwCanvas.height / 2); const color = `hsl(${Math.random() * 360}, 100%, 50%)`; fireworks.push({ x, y, targetY, color, speed: 5 }); }
-        function explode(x, y, color) { for (let i = 0; i < 50; i++) { const angle = Math.random() * Math.PI * 2; const speed = Math.random() * 4 + 2; fireworkParticles.push({ x, y, color, vx: Math.cos(angle) * speed, vy: Math.sin(angle) * speed, alpha: 1, decay: Math.random() * 0.015 + 0.01 }); } }
-        function animateFireworks() { if (!document.getElementById('final-view').classList.contains('active')) return; fwCtx.fillStyle = 'rgba(17, 24, 39, 0.2)'; fwCtx.fillRect(0, 0, fwCanvas.width, fwCanvas.height); fireworks.forEach((fw, index) => { fw.y -= fw.speed; fwCtx.beginPath(); fwCtx.arc(fw.x, fw.y, 2, 0, Math.PI * 2); fwCtx.fillStyle = fw.color; fwCtx.fill(); if (fw.y <= fw.targetY) { explode(fw.x, fw.y, fw.color); fireworks.splice(index, 1); } }); fireworkParticles.forEach((p, index) => { p.x += p.vx; p.y += p.vy; p.vy += 0.05; p.alpha -= p.decay; fwCtx.save(); fwCtx.globalAlpha = p.alpha; fwCtx.beginPath(); fwCtx.arc(p.x, p.y, 1.5, 0, Math.PI * 2); fwCtx.fillStyle = p.color; fwCtx.fill(); fwCtx.restore(); if (p.alpha <= 0) fireworkParticles.splice(index, 1); }); requestAnimationFrame(animateFireworks); }
+
+        // Fireworks
+        const fwCanvas = document.getElementById('firework-canvas');
+        const fwCtx = fwCanvas.getContext('2d');
+        let fireworks = [], fireworkParticles = [];
+        function initFireworks() {
+            fwCanvas.width = window.innerWidth; fwCanvas.height = window.innerHeight;
+            animateFireworks();
+            setInterval(() => { if (document.getElementById('final-view').classList.contains('active')) createFirework(); }, 1000);
+        }
+        function createFirework() {
+            const x = Math.random() * fwCanvas.width, y = fwCanvas.height;
+            const targetY = Math.random() * (fwCanvas.height / 2);
+            const color = `hsl(${Math.random() * 360}, 100%, 50%)`;
+            fireworks.push({ x, y, targetY, color, speed: 5 });
+        }
+        function explode(x, y, color) {
+            for (let i = 0; i < 50; i++) {
+                const angle = Math.random() * Math.PI * 2, speed = Math.random() * 4 + 2;
+                fireworkParticles.push({ x, y, color, vx: Math.cos(angle) * speed, vy: Math.sin(angle) * speed, alpha: 1, decay: Math.random() * 0.015 + 0.01 });
+            }
+        }
+        function animateFireworks() {
+            if (!document.getElementById('final-view').classList.contains('active')) return;
+            fwCtx.fillStyle = 'rgba(17, 24, 39, 0.2)'; fwCtx.fillRect(0, 0, fwCanvas.width, fwCanvas.height);
+            fireworks.forEach((fw, i) => { fw.y -= fw.speed; fwCtx.beginPath(); fwCtx.arc(fw.x, fw.y, 2, 0, Math.PI * 2); fwCtx.fillStyle = fw.color; fwCtx.fill(); if (fw.y <= fw.targetY) { explode(fw.x, fw.y, fw.color); fireworks.splice(i, 1); } });
+            fireworkParticles.forEach((p, i) => { p.x += p.vx; p.y += p.vy; p.vy += 0.05; p.alpha -= p.decay; fwCtx.save(); fwCtx.globalAlpha = p.alpha; fwCtx.beginPath(); fwCtx.arc(p.x, p.y, 1.5, 0, Math.PI * 2); fwCtx.fillStyle = p.color; fwCtx.fill(); fwCtx.restore(); if (p.alpha <= 0) fireworkParticles.splice(i, 1); });
+            requestAnimationFrame(animateFireworks);
+        }
     </script>
 </body>
 </html>
