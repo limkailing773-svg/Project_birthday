@@ -16,7 +16,7 @@
         .text-gradient { background: linear-gradient(120deg, #f093fb 0%, #f5576c 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
         @keyframes float { 0% { transform: translateY(0px); } 50% { transform: translateY(-20px); } 100% { transform: translateY(0px); } }
         .animate-float { animation: float 4s ease-in-out infinite; }
-        .flash-item { position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0; transition: opacity 1.5s ease-in-out; display: flex; flex-direction: column; justify-content: center; align-items: center; background: #000; }
+        .flash-item { position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0; transition: opacity 1s ease-in-out; display: flex; flex-direction: column; justify-content: center; align-items: center; background: #000; }
         .flash-item.active { opacity: 1; }
         .view-section { display: none; width: 100%; height: 100vh; }
         .view-section.active { display: flex; flex-direction: column; }
@@ -36,12 +36,11 @@
         <section id="home-view" class="view-section active justify-center items-center px-6 text-center">
             <div class="animate-float mb-8">
                 <div class="w-40 h-40 md:w-56 md:h-56 rounded-full border-8 border-white shadow-2xl overflow-hidden mx-auto">
-                    <!-- 自動尋找你的第一張照片作為頭像 -->
-                    <img src="images/IMG_2421.JPG" alt="壽星" class="w-full h-full object-cover" onerror="this.src='https://via.placeholder.com/400?text=Please+Check+Filename'">
+                    <img src="images/IMG_2421.JPG" alt="壽星" class="w-full h-full object-cover" onerror="this.src='https://via.placeholder.com/400?text=IMG_2421.JPG'">
                 </div>
             </div>
             <h1 class="text-4xl md:text-6xl font-bold mb-4 text-gradient">祝你生日快樂!</h1>
-            <p class="text-xl md:text-2xl mb-8 cursive text-pink-500">To: 親愛的 [壽星名字]</p>
+            <p class="text-xl md:text-2xl mb-8 cursive text-pink-500">To: 親愛的壽星</p>
             <div class="glass p-6 md:p-8 max-w-xl w-full grid grid-cols-4 gap-4 shadow-xl mx-auto">
                 <div><span id="days" class="block text-3xl font-bold text-pink-600">00</span><span class="text-sm">天</span></div>
                 <div><span id="hours" class="block text-3xl font-bold text-pink-600">00</span><span class="text-sm">時</span></div>
@@ -71,12 +70,47 @@
     </main>
     <script>
         const BIRTHDAY_DATE = new Date(2025, 4, 20, 0, 0, 0); 
-        // 這裡填入你剛剛在 images 資料夾裡看到的真實檔名，注意大小寫必須精確
         const flashImages = [
-            { src: 'images/IMG_2421.JPG', date: '2023.05.12', text: '我們的初見' },
-            { src: 'images/IMG_2490.JPG', date: '2023.08.20', text: '夏日的旅行' },
-            { src: 'images/IMG_2550.JPG', date: '2023.12.24', text: '冬日的暖陽' },
-            { src: 'images/IMG_2723.JPG', date: '今天', text: '最好的你' }
+            { src: 'images/IDG_20251220_214506_562.JPG', text: 'Memories' },
+            { src: 'images/IDG_20260110_164620_835.JPG', text: 'Memories' },
+            { src: 'images/IDG_20260227_101519_019.JPG', text: 'Memories' },
+            { src: 'images/IDG_20260227_153707_409.JPG', text: 'Memories' },
+            { src: 'images/IMG_2421.JPG', text: 'Memories' },
+            { src: 'images/IMG_2490.JPG', text: 'Memories' },
+            { src: 'images/IMG_2550.JPG', text: 'Memories' },
+            { src: 'images/IMG_2723.JPG', text: 'Memories' },
+            { src: 'images/IMG_2825.JPG', text: 'Memories' },
+            { src: 'images/IMG_2998.JPG', text: 'Memories' },
+            { src: 'images/IMG_3014.JPG', text: 'Memories' },
+            { src: 'images/IMG_3081.JPG', text: 'Memories' },
+            { src: 'images/IMG_4691.JPG', text: 'Memories' },
+            { src: 'images/IMG_4763.jpg', text: 'Memories' },
+            { src: 'images/IMG_5090.JPG', text: 'Memories' },
+            { src: 'images/IMG_5185.JPG', text: 'Memories' },
+            { src: 'images/IMG_5256.JPG', text: 'Memories' },
+            { src: 'images/IMG_5287.JPG', text: 'Memories' },
+            { src: 'images/IMG_5330.JPG', text: 'Memories' },
+            { src: 'images/IMG_5409.JPG', text: 'Memories' },
+            { src: 'images/IMG_5421.JPG', text: 'Memories' },
+            { src: 'images/IMG_5481.JPG', text: 'Memories' },
+            { src: 'images/IMG_5495.JPG', text: 'Memories' },
+            { src: 'images/IMG_5593.JPG', text: 'Memories' },
+            { src: 'images/IMG_5599.JPG', text: 'Memories' },
+            { src: 'images/IMG_5614.JPG', text: 'Memories' },
+            { src: 'images/IMG_5637.JPG', text: 'Memories' },
+            { src: 'images/IMG_5704.JPG', text: 'Memories' },
+            { src: 'images/IMG_6185.JPG', text: 'Memories' },
+            { src: 'images/IMG_6225.JPG', text: 'Memories' },
+            { src: 'images/IMG_6913.JPG', text: 'Memories' },
+            { src: 'images/IMG_6946.JPG', text: 'Memories' },
+            { src: 'images/IMG_7034.JPG', text: 'Memories' },
+            { src: 'images/IMG_7098.JPG', text: 'Memories' },
+            { src: 'images/IMG_7189.JPG', text: 'Memories' },
+            { src: 'images/IMG_7306.JPG', text: 'Memories' },
+            { src: 'images/IMG_7364.JPG', text: 'Memories' },
+            { src: 'images/IMG_7666.JPG', text: 'Memories' },
+            { src: 'images/IMG_7903.JPG', text: 'Memories' },
+            { src: 'images/IMG_7974.JPG', text: 'Memories' }
         ];
         function updateCountdown() {
             const now = new Date();
@@ -96,13 +130,13 @@
             flashImages.forEach((imgObj) => {
                 const div = document.createElement('div');
                 div.className = 'flash-item';
-                div.innerHTML = `<img src="${imgObj.src}" class="max-w-[85%] max-h-[70vh] object-contain shadow-2xl border-4 border-white mb-6"><div class="text-white text-center"><p class="text-pink-400 font-bold text-2xl mb-2">${imgObj.date}</p><p class="text-xl opacity-80">${imgObj.text}</p></div>`;
+                div.innerHTML = `<img src="${imgObj.src}" class="max-w-[90%] max-h-[80vh] object-contain shadow-2xl border-2 border-white mb-4"><div class="text-white text-center"><p class="text-lg opacity-80">${imgObj.text}</p></div>`;
                 container.appendChild(div);
             });
             let currentIndex = 0; const items = document.querySelectorAll('.flash-item');
             function showNext() {
                 if (currentIndex > 0) items[currentIndex - 1].classList.remove('active');
-                if (currentIndex < items.length) { items[currentIndex].classList.add('active'); currentIndex++; setTimeout(showNext, 3000); } 
+                if (currentIndex < items.length) { items[currentIndex].classList.add('active'); currentIndex++; setTimeout(showNext, 2000); } 
                 else { document.getElementById('flash-finish-btn').classList.remove('hidden'); }
             }
             setTimeout(showNext, 500); 
@@ -110,23 +144,17 @@
         function showFinalPage() { switchView('final-view'); initFireworks(); }
         const musicBtn = document.getElementById('music-btn'); const audio = document.getElementById('bg-music'); let isPlaying = false;
         musicBtn.addEventListener('click', () => { if (isPlaying) { audio.pause(); document.getElementById('music-icon').innerText = '🔇'; } else { audio.play(); document.getElementById('music-icon').innerText = '🎵'; } isPlaying = !isPlaying; });
-        const canvas = document.getElementById('effect-canvas'); const ctx = canvas.getContext('2d'); let particles = []; let trailParticles = [];
+        const canvas = document.getElementById('effect-canvas'); const ctx = canvas.getContext('2d'); let particles = [];
         function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
         window.addEventListener('resize', resize); resize();
-        window.addEventListener('mousemove', (e) => { if (Math.random() > 0.3) trailParticles.push(new TrailHeart(e.clientX, e.clientY)); });
         class Heart {
             constructor() { this.reset(); }
             reset() { this.x = Math.random() * canvas.width; this.y = -20; this.size = Math.random() * 10 + 5; this.speed = Math.random() * 2 + 1; this.opacity = Math.random() * 0.5 + 0.3; this.swing = Math.random() * 2; this.swingStep = 0; }
             draw() { ctx.save(); ctx.globalAlpha = this.opacity; ctx.fillStyle = '#ff85a2'; ctx.translate(this.x, this.y); ctx.beginPath(); ctx.moveTo(0, 0); ctx.bezierCurveTo(-this.size/2, -this.size/2, -this.size, this.size/3, 0, this.size); ctx.bezierCurveTo(this.size, this.size/3, this.size/2, -this.size/2, 0, 0); ctx.fill(); ctx.restore(); }
             update() { this.y += this.speed; this.swingStep += 0.02; this.x += Math.sin(this.swingStep) * this.swing; if (this.y > canvas.height) this.reset(); }
         }
-        class TrailHeart {
-            constructor(x, y) { this.x = x; this.y = y; this.size = Math.random() * 8 + 4; this.speedX = Math.random() * 2 - 1; this.speedY = Math.random() * -2 - 1; this.opacity = 1; }
-            update() { this.x += this.speedX; this.y += this.speedY; this.opacity -= 0.03; this.size -= 0.1; }
-            draw() { ctx.save(); ctx.globalAlpha = Math.max(0, this.opacity); ctx.fillStyle = '#ff85a2'; ctx.translate(this.x, this.y); ctx.beginPath(); ctx.moveTo(0, 0); ctx.bezierCurveTo(-this.size/2, -this.size/2, -this.size, this.size/3, 0, this.size); ctx.bezierCurveTo(this.size, this.size/3, this.size/2, -this.size/2, 0, 0); ctx.fill(); ctx.restore(); }
-        }
         for (let i = 0; i < 30; i++) particles.push(new Heart());
-        function animate() { ctx.clearRect(0, 0, canvas.width, canvas.height); particles.forEach(p => { p.update(); p.draw(); }); for (let i = trailParticles.length - 1; i >= 0; i--) { const p = trailParticles[i]; p.update(); p.draw(); if (p.opacity <= 0 || p.size <= 0) trailParticles.splice(i, 1); } requestAnimationFrame(animate); }
+        function animate() { ctx.clearRect(0, 0, canvas.width, canvas.height); particles.forEach(p => { p.update(); p.draw(); }); requestAnimationFrame(animate); }
         animate();
         const fwCanvas = document.getElementById('firework-canvas'); const fwCtx = fwCanvas.getContext('2d'); let fireworks = []; let fireworkParticles = [];
         function initFireworks() { fwCanvas.width = window.innerWidth; fwCanvas.height = window.innerHeight; animateFireworks(); setInterval(() => { if (document.getElementById('final-view').classList.contains('active')) createFirework(); }, 1000); }
