@@ -33,7 +33,6 @@
     </style>
 </head>
 <body>
-    <!-- 密碼鎖 -->
     <div id="lock-screen">
         <div style="font-size:3rem">🔐</div>
         <h2>輸入密碼以繼續</h2>
@@ -42,292 +41,293 @@
         <button id="unlock-btn" onclick="checkPassword()">解鎖 ❤️</button>
         <div id="lock-error"></div>
     </div>
-
-    <canvas id="effect-canvas"></canvas>
-
-    <div class="fixed top-6 right-6 z-50">
-        <button id="music-btn" class="p-3 glass rounded-full shadow-lg hover:scale-110 transition-transform">
-            <span id="music-icon">🎵</span>
-        </button>
-        <audio id="bg-music" loop>
-            <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
-        </audio>
-    </div>
-
-    <main class="relative z-10 w-full h-screen">
-        <!-- 首頁 -->
-        <section id="home-view" class="view-section active justify-center items-center px-6 text-center">
-
-            <div class="animate-float mb-8">
-                <div class="w-40 h-40 md:w-56 md:h-56 rounded-full border-8 border-white shadow-2xl overflow-hidden mx-auto">
-                    <img id="avatar-img" alt="❤️" class="w-full h-full object-cover">
-                </div>
-            </div>
-            <h1 class="text-4xl md:text-6xl font-bold mb-4 text-gradient">祝你生日快樂!</h1>
-            <p class="text-xl md:text-2xl mb-8 cursive text-pink-500">To: 親愛的MONICA！！！</p>
-            <div class="glass p-6 md:p-8 max-w-xl w-full grid grid-cols-4 gap-4 shadow-xl mx-auto">
-                <div><span id="days" class="block text-3xl font-bold text-pink-600">00</span><span class="text-sm">天</span></div>
-                <div><span id="hours" class="block text-3xl font-bold text-pink-600">00</span><span class="text-sm">時</span></div>
-                <div><span id="minutes" class="block text-3xl font-bold text-pink-600">00</span><span class="text-sm">分</span></div>
-                <div><span id="seconds" class="block text-3xl font-bold text-pink-600">00</span><span class="text-sm">秒</span></div>
-            </div>
-            <div class="mt-12">
-                <button onclick="startFlashShow()" class="bg-pink-500 text-white px-8 py-3 rounded-full shadow-lg hover:bg-pink-600 transition-colors">開啟時光機</button>
-            </div>
-        </section>
-
-        <!-- 時光機 -->
-        <section id="flash-view" class="view-section relative bg-black overflow-hidden">
-            <div id="flash-container" class="w-full h-full"></div>
-            <div id="flash-finish-btn" class="absolute bottom-20 left-1/2 -translate-x-1/2 z-20 hidden">
-                <button onclick="showFinalPage()" class="bg-white text-pink-600 px-10 py-4 rounded-full font-bold shadow-2xl hover:scale-105 transition-transform">點！ ➔</button>
-            </div>
-        </section>
-
-        <!-- 結尾頁 -->
-        <section id="final-view" class="view-section relative justify-center items-center bg-gray-900 text-center px-6 overflow-hidden">
-            <canvas id="firework-canvas"></canvas>
-            <div class="max-w-2xl relative z-10">
-                <h2 class="text-6xl md:text-8xl font-bold text-gradient mb-8 drop-shadow-lg">HAPPY BIRTHDAY!</h2>
-                <div class="text-4xl md:text-6xl mb-12 animate-pulse">🎂</div>
-                <p class="text-xl md:text-2xl text-white leading-relaxed mb-10 opacity-90">在這個特別的日子裡，願你每一天都充滿陽光，每一刻都帶著微笑。<br>未來的日子裡，我們繼續創造更多美好的回憶。</p>
-                <div class="cursive text-4xl text-pink-400 drop-shadow-md">Love You Forever ❤️</div>
-                <button onclick="location.reload()" class="mt-16 text-gray-400 hover:text-pink-300 text-sm transition-colors">重新播放時光機</button>
-            </div>
-        </section>
-    </main>
+    
+    <div id="app-root"></div>
 
     <script>
-        // ── 密碼鎖（SHA-256 雜湊比對）────────────────────────────
         const _PWD_HASH = '1a753a99d885a22fa56a0ed936f068e74301f09a4e93bc2118a4e128a72ee8e2';
         let attempts = 0;
+        
         async function checkPassword() {
             const val = document.getElementById('pwd-input').value;
             const err = document.getElementById('lock-error');
             const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(val));
             const h = Array.from(new Uint8Array(buf)).map(x=>x.toString(16).padStart(2,'0')).join('');
+            
             if (h === _PWD_HASH) {
                 document.getElementById('lock-screen').style.display = 'none';
+                buildApp();
             } else {
                 attempts++;
                 document.getElementById('pwd-input').value = '';
                 err.innerText = attempts >= 3 ? `密碼錯誤（已嘗試 ${attempts} 次），請確認後再試` : '密碼錯誤，請再試一次';
             }
         }
+        
         document.addEventListener('DOMContentLoaded', () => {
             document.getElementById('pwd-input').addEventListener('keydown', e => {
                 if (e.key === 'Enter') checkPassword();
             });
         });
 
-        // ── 圖片資料（R2 混淆）───────────────────────────────────
-        const BIRTHDAY_DATE = new Date(2025, 2, 23, 0, 0, 0);
-        const R2 = [atob('aHR0cHM6Ly8='),atob('YmlydGhkYXktcHJveHku'),atob('bGlta2FpbGluZzc3Mw=='),atob('LndvcmtlcnMuZGV2'),atob('L2ltYWdlcw==')].join('');
-        document.getElementById('avatar-img').src = `${R2}/IMG_2421.JPG`;
-        const flashImages = [
-            `${R2}/IDG_20251220_214506_562.JPG`,
-            `${R2}/IDG_20260110_164620_835.JPG`,
-            `${R2}/IDG_20260227_101519_019.JPG`,
-            `${R2}/IDG_20260227_153707_409.JPG`,
-            `${R2}/IMG_2421.JPG`,  `${R2}/IMG_2490.JPG`,
-            `${R2}/IMG_2550.JPG`,  `${R2}/IMG_2723.JPG`,
-            `${R2}/IMG_2825.JPG`,  `${R2}/IMG_2998.JPG`,
-            `${R2}/IMG_3014.JPG`,  `${R2}/IMG_3081.JPG`,
-            `${R2}/IMG_4691.JPG`,  `${R2}/IMG_4763.jpg`,
-            `${R2}/IMG_5090.JPG`,  `${R2}/IMG_5185.JPG`,
-            `${R2}/IMG_5256.JPG`,  `${R2}/IMG_5287.JPG`,
-            `${R2}/IMG_5330.JPG`,  `${R2}/IMG_5409.JPG`,
-            `${R2}/IMG_5421.JPG`,  `${R2}/IMG_5481.JPG`,
-            `${R2}/IMG_5495.JPG`,  `${R2}/IMG_5593.JPG`,
-            `${R2}/IMG_5599.JPG`,  `${R2}/IMG_5614.JPG`,
-            `${R2}/IMG_5637.JPG`,  `${R2}/IMG_5704.JPG`,
-            `${R2}/IMG_6185.JPG`,  `${R2}/IMG_6225.JPG`,
-            `${R2}/IMG_6913.JPG`,  `${R2}/IMG_6946.JPG`,
-            `${R2}/IMG_7034.JPG`,  `${R2}/IMG_7098.JPG`,
-            `${R2}/IMG_7189.JPG`,  `${R2}/IMG_7306.JPG`,
-            `${R2}/IMG_7364.JPG`,  `${R2}/IMG_7974.JPG`,
-            `${R2}/IMG_7903.JPG`,  `${R2}/IMG_7666.JPG`
-        ];
+        function buildApp() {
+            const root = document.getElementById('app-root');
+            
+            const t1 = ['祝','你','生','日','快','樂','!'].join('');
+            const t2 = ['T','o',':',' ','親','愛','的','M','O','N','I','C','A','！','！','！'].join('');
+            const t3 = ['天'].join('');
+            const t4 = ['時'].join('');
+            const t5 = ['分'].join('');
+            const t6 = ['秒'].join('');
+            const t7 = ['開','啟','時','光','機'].join('');
+            const t8 = ['點','！',' ','➔'].join('');
+            const t9 = ['H','A','P','P','Y',' ','B','I','R','T','H','D','A','Y','!'].join('');
+            const t10 = ['在','這','個','特','別','的','日','子','裡','，','願','你','每','一','天','都','充','滿','陽','光','，','每','一','刻','都','帶','著','微','笑','。'].join('');
+            const t11 = ['未','來','的','日','子','裡','，','我','們','繼','續','創','造','更','多','美','好','的','回','憶','。'].join('');
+            const t12 = ['L','o','v','e',' ','Y','o','u',' ','F','o','r','e','v','e','r',' ','❤','️'].join('');
+            const t13 = ['重','新','播','放','時','光','機'].join('');
 
-        // ── 倒數計時 ──────────────────────────────────────────────
-        function updateCountdown() {
-            const now = new Date();
-            let diff = BIRTHDAY_DATE - now;
-            if (diff < 0) {
-                BIRTHDAY_DATE.setFullYear(now.getFullYear() + (now.getMonth() > BIRTHDAY_DATE.getMonth() ? 1 : 0));
-                diff = BIRTHDAY_DATE - now;
+            root.innerHTML = `
+                <canvas id="effect-canvas"></canvas>
+                <div class="fixed top-6 right-6 z-50">
+                    <button id="music-btn" class="p-3 glass rounded-full shadow-lg hover:scale-110 transition-transform">
+                        <span id="music-icon">🎵</span>
+                    </button>
+                    <audio id="bg-music" loop>
+                        <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+                    </audio>
+                </div>
+                <main class="relative z-10 w-full h-screen">
+                    <section id="home-view" class="view-section active justify-center items-center px-6 text-center">
+                        <div class="animate-float mb-8">
+                            <div class="w-40 h-40 md:w-56 md:h-56 rounded-full border-8 border-white shadow-2xl overflow-hidden mx-auto">
+                                <img id="avatar-img" alt="❤️" class="w-full h-full object-cover">
+                            </div>
+                        </div>
+                        <h1 class="text-4xl md:text-6xl font-bold mb-4 text-gradient">${t1}</h1>
+                        <p class="text-xl md:text-2xl mb-8 cursive text-pink-500">${t2}</p>
+                        <div class="glass p-6 md:p-8 max-w-xl w-full grid grid-cols-4 gap-4 shadow-xl mx-auto">
+                            <div><span id="days" class="block text-3xl font-bold text-pink-600">00</span><span class="text-sm">${t3}</span></div>
+                            <div><span id="hours" class="block text-3xl font-bold text-pink-600">00</span><span class="text-sm">${t4}</span></div>
+                            <div><span id="minutes" class="block text-3xl font-bold text-pink-600">00</span><span class="text-sm">${t5}</span></div>
+                            <div><span id="seconds" class="block text-3xl font-bold text-pink-600">00</span><span class="text-sm">${t6}</span></div>
+                        </div>
+                        <div class="mt-12">
+                            <button onclick="startFlashShow()" class="bg-pink-500 text-white px-8 py-3 rounded-full shadow-lg hover:bg-pink-600 transition-colors">${t7}</button>
+                        </div>
+                    </section>
+                    <section id="flash-view" class="view-section relative bg-black overflow-hidden">
+                        <div id="flash-container" class="w-full h-full"></div>
+                        <div id="flash-finish-btn" class="absolute bottom-20 left-1/2 -translate-x-1/2 z-20 hidden">
+                            <button onclick="showFinalPage()" class="bg-white text-pink-600 px-10 py-4 rounded-full font-bold shadow-2xl hover:scale-105 transition-transform">${t8}</button>
+                        </div>
+                    </section>
+                    <section id="final-view" class="view-section relative justify-center items-center bg-gray-900 text-center px-6 overflow-hidden">
+                        <canvas id="firework-canvas"></canvas>
+                        <div class="max-w-2xl relative z-10">
+                            <h2 class="text-6xl md:text-8xl font-bold text-gradient mb-8 drop-shadow-lg">${t9}</h2>
+                            <div class="text-4xl md:text-6xl mb-12 animate-pulse">🎂</div>
+                            <p class="text-xl md:text-2xl text-white leading-relaxed mb-10 opacity-90">${t10}<br>${t11}</p>
+                            <div class="cursive text-4xl text-pink-400 drop-shadow-md">${t12}</div>
+                            <button onclick="location.reload()" class="mt-16 text-gray-400 hover:text-pink-300 text-sm transition-colors">${t13}</button>
+                        </div>
+                    </section>
+                </main>
+            `;
+            initAppLogic();
+        }
+
+        function initAppLogic() {
+            const R2 = [atob('aHR0cHM6Ly8='),atob('YmlydGhkYXktcHJveHku'),atob('bGlta2FpbGluZzc3Mw=='),atob('LndvcmtlcnMuZGV2'),atob('L2ltYWdlcw==')].join('');
+            document.getElementById('avatar-img').src = `${R2}/IMG_2421.JPG`;
+            
+            const flashImages = [
+                `${R2}/IDG_20251220_214506_562.JPG`, `${R2}/IDG_20260110_164620_835.JPG`,
+                `${R2}/IDG_20260227_101519_019.JPG`, `${R2}/IDG_20260227_153707_409.JPG`,
+                `${R2}/IMG_2421.JPG`,  `${R2}/IMG_2490.JPG`, `${R2}/IMG_2550.JPG`,  `${R2}/IMG_2723.JPG`,
+                `${R2}/IMG_2825.JPG`,  `${R2}/IMG_2998.JPG`, `${R2}/IMG_3014.JPG`,  `${R2}/IMG_3081.JPG`,
+                `${R2}/IMG_4691.JPG`,  `${R2}/IMG_4763.jpg`, `${R2}/IMG_5090.JPG`,  `${R2}/IMG_5185.JPG`,
+                `${R2}/IMG_5256.JPG`,  `${R2}/IMG_5287.JPG`, `${R2}/IMG_5330.JPG`,  `${R2}/IMG_5409.JPG`,
+                `${R2}/IMG_5421.JPG`,  `${R2}/IMG_5481.JPG`, `${R2}/IMG_5495.JPG`,  `${R2}/IMG_5593.JPG`,
+                `${R2}/IMG_5599.JPG`,  `${R2}/IMG_5614.JPG`, `${R2}/IMG_5637.JPG`,  `${R2}/IMG_5704.JPG`,
+                `${R2}/IMG_6185.JPG`,  `${R2}/IMG_6225.JPG`, `${R2}/IMG_6913.JPG`,  `${R2}/IMG_6946.JPG`,
+                `${R2}/IMG_7034.JPG`,  `${R2}/IMG_7098.JPG`, `${R2}/IMG_7189.JPG`,  `${R2}/IMG_7306.JPG`,
+                `${R2}/IMG_7364.JPG`,  `${R2}/IMG_7974.JPG`, `${R2}/IMG_7903.JPG`,  `${R2}/IMG_7666.JPG`
+            ];
+
+            const BIRTHDAY_DATE = new Date(2025, 2, 23, 0, 0, 0);
+            function updateCountdown() {
+                const now = new Date();
+                let diff = BIRTHDAY_DATE - now;
+                if (diff < 0) {
+                    BIRTHDAY_DATE.setFullYear(now.getFullYear() + (now.getMonth() > BIRTHDAY_DATE.getMonth() ? 1 : 0));
+                    diff = BIRTHDAY_DATE - now;
+                }
+                document.getElementById('days').innerText    = Math.floor(diff / 86400000).toString().padStart(2,'0');
+                document.getElementById('hours').innerText   = Math.floor(diff / 3600000 % 24).toString().padStart(2,'0');
+                document.getElementById('minutes').innerText = Math.floor(diff / 60000 % 60).toString().padStart(2,'0');
+                document.getElementById('seconds').innerText = Math.floor(diff / 1000 % 60).toString().padStart(2,'0');
             }
-            document.getElementById('days').innerText    = Math.floor(diff / 86400000).toString().padStart(2,'0');
-            document.getElementById('hours').innerText   = Math.floor(diff / 3600000 % 24).toString().padStart(2,'0');
-            document.getElementById('minutes').innerText = Math.floor(diff / 60000 % 60).toString().padStart(2,'0');
-            document.getElementById('seconds').innerText = Math.floor(diff / 1000 % 60).toString().padStart(2,'0');
-        }
-        setInterval(updateCountdown, 1000); updateCountdown();
+            setInterval(updateCountdown, 1000); updateCountdown();
 
-        // ── 頁面切換 ──────────────────────────────────────────────
-        function switchView(id) {
-            document.querySelectorAll('.view-section').forEach(s => s.classList.remove('active'));
-            document.getElementById(id).classList.add('active');
-        }
+            window.switchView = function(id) {
+                document.querySelectorAll('.view-section').forEach(s => s.classList.remove('active'));
+                document.getElementById(id).classList.add('active');
+            }
 
-        // ── 時光機 ────────────────────────────────────────────────
-        function startFlashShow() {
-            switchView('flash-view');
-            const container = document.getElementById('flash-container');
-            container.innerHTML = '';
-            flashImages.forEach(src => {
-                const div = document.createElement('div');
-                div.className = 'flash-item';
-                div.innerHTML = `<img src="${src}" class="max-w-[90%] max-h-[90vh] object-contain shadow-2xl border-2 border-white">`;
-                container.appendChild(div);
+            window.startFlashShow = function() {
+                window.switchView('flash-view');
+                const container = document.getElementById('flash-container');
+                container.innerHTML = '';
+                flashImages.forEach(src => {
+                    const div = document.createElement('div');
+                    div.className = 'flash-item';
+                    div.innerHTML = `<img src="${src}" class="max-w-[90%] max-h-[90vh] object-contain shadow-2xl border-2 border-white">`;
+                    container.appendChild(div);
+                });
+                let idx = 0;
+                const items = document.querySelectorAll('.flash-item');
+                function showNext() {
+                    if (idx > 0) items[idx-1].classList.remove('active');
+                    if (idx < items.length) { items[idx].classList.add('active'); idx++; setTimeout(showNext, 2000); }
+                    else { document.getElementById('flash-finish-btn').classList.remove('hidden'); }
+                }
+                setTimeout(showNext, 500);
+            }
+
+            window.showFinalPage = function() { window.switchView('final-view'); initFireworks(); }
+
+            const musicBtn = document.getElementById('music-btn');
+            const audio = document.getElementById('bg-music');
+            let isPlaying = false;
+            musicBtn.addEventListener('click', () => {
+                isPlaying ? audio.pause() : audio.play();
+                isPlaying = !isPlaying;
+                document.getElementById('music-icon').innerText = isPlaying ? '🎵' : '🔇';
             });
-            let idx = 0;
-            const items = document.querySelectorAll('.flash-item');
-            function showNext() {
-                if (idx > 0) items[idx-1].classList.remove('active');
-                if (idx < items.length) { items[idx].classList.add('active'); idx++; setTimeout(showNext, 2000); }
-                else { document.getElementById('flash-finish-btn').classList.remove('hidden'); }
+
+            const canvas = document.getElementById('effect-canvas');
+            const ctx = canvas.getContext('2d');
+            function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+            window.addEventListener('resize', resize); resize();
+            
+            function drawHeart(c, s) {
+                c.beginPath();
+                c.moveTo(0, 0);
+                c.bezierCurveTo(-s/2, -s/2, -s, s/3, 0, s);
+                c.bezierCurveTo(s, s/3, s/2, -s/2, 0, 0);
             }
-            setTimeout(showNext, 500);
-        }
-
-        function showFinalPage() { switchView('final-view'); initFireworks(); }
-
-        // ── 音樂 ──────────────────────────────────────────────────
-        const musicBtn = document.getElementById('music-btn');
-        const audio = document.getElementById('bg-music');
-        let isPlaying = false;
-        musicBtn.addEventListener('click', () => {
-            isPlaying ? audio.pause() : audio.play();
-            isPlaying = !isPlaying;
-            document.getElementById('music-icon').innerText = isPlaying ? '🎵' : '🔇';
-        });
-
-        // ── Canvas 主體 ───────────────────────────────────────────
-        const canvas = document.getElementById('effect-canvas');
-        const ctx = canvas.getContext('2d');
-        function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
-        window.addEventListener('resize', resize); resize();
-
-        // 共用愛心路徑
-        function drawHeart(c, s) {
-            c.beginPath();
-            c.moveTo(0, 0);
-            c.bezierCurveTo(-s/2, -s/2, -s, s/3, 0, s);
-            c.bezierCurveTo(s, s/3, s/2, -s/2, 0, 0);
-        }
-
-        // 飄落愛心（背景）
-        class FallHeart {
-            constructor() { this.reset(); }
-            reset() {
-                this.x = Math.random() * canvas.width; this.y = -20;
-                this.size = Math.random() * 10 + 5; this.speed = Math.random() * 2 + 1;
-                this.opacity = Math.random() * 0.5 + 0.3;
-                this.swing = Math.random() * 2; this.swingStep = 0;
+            
+            class FallHeart {
+                constructor() { this.reset(); }
+                reset() {
+                    this.x = Math.random() * canvas.width; this.y = -20;
+                    this.size = Math.random() * 10 + 5; this.speed = Math.random() * 2 + 1;
+                    this.opacity = Math.random() * 0.5 + 0.3;
+                    this.swing = Math.random() * 2; this.swingStep = 0;
+                }
+                update() {
+                    this.y += this.speed; this.swingStep += 0.02;
+                    this.x += Math.sin(this.swingStep) * this.swing;
+                    if (this.y > canvas.height) this.reset();
+                }
+                draw() {
+                    ctx.save(); ctx.globalAlpha = this.opacity; ctx.fillStyle = '#ff85a2';
+                    ctx.translate(this.x, this.y); drawHeart(ctx, this.size); ctx.fill(); ctx.restore();
+                }
             }
-            update() {
-                this.y += this.speed; this.swingStep += 0.02;
-                this.x += Math.sin(this.swingStep) * this.swing;
-                if (this.y > canvas.height) this.reset();
+            
+            class TrailHeart {
+                constructor(x, y) {
+                    this.x = x; this.y = y;
+                    this.size = Math.random() * 12 + 6;
+                    this.opacity = 1;
+                    this.vx = (Math.random() - 0.5) * 2;
+                    this.vy = Math.random() * -2 - 1;
+                    this.color = `hsl(${Math.random() * 40 + 330}, 100%, 65%)`;
+                }
+                update() {
+                    this.x += this.vx; this.y += this.vy;
+                    this.vy += 0.05; this.size -= 0.15; this.opacity -= 0.025;
+                }
+                draw() {
+                    if (this.opacity <= 0 || this.size <= 0) return;
+                    ctx.save(); ctx.globalAlpha = this.opacity; ctx.fillStyle = this.color;
+                    ctx.translate(this.x, this.y); drawHeart(ctx, this.size); ctx.fill(); ctx.restore();
+                }
+                get dead() { return this.opacity <= 0 || this.size <= 0; }
             }
-            draw() {
-                ctx.save(); ctx.globalAlpha = this.opacity; ctx.fillStyle = '#ff85a2';
-                ctx.translate(this.x, this.y); drawHeart(ctx, this.size); ctx.fill(); ctx.restore();
+            
+            const fallHearts = Array.from({ length: 30 }, () => new FallHeart());
+            let trailHearts = [];
+            let lastTrail = 0;
+            
+            function spawnTrail(x, y) {
+                const now = Date.now();
+                if (now - lastTrail < 30) return;
+                lastTrail = now;
+                for (let i = 0; i < 3; i++) trailHearts.push(new TrailHeart(x, y));
             }
-        }
-
-        // 滑鼠／觸控尾跡愛心
-        class TrailHeart {
-            constructor(x, y) {
-                this.x = x; this.y = y;
-                this.size = Math.random() * 12 + 6;
-                this.opacity = 1;
-                this.vx = (Math.random() - 0.5) * 2;
-                this.vy = Math.random() * -2 - 1;
-                this.color = `hsl(${Math.random() * 40 + 330}, 100%, 65%)`;
+            
+            window.addEventListener('mousemove', e => spawnTrail(e.clientX, e.clientY));
+            window.addEventListener('touchmove', e => {
+                e.preventDefault();
+                Array.from(e.touches).forEach(t => spawnTrail(t.clientX, t.clientY));
+            }, { passive: false });
+            
+            function animate() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                fallHearts.forEach(h => { h.update(); h.draw(); });
+                trailHearts = trailHearts.filter(h => { h.update(); h.draw(); return !h.dead; });
+                requestAnimationFrame(animate);
             }
-            update() {
-                this.x += this.vx; this.y += this.vy;
-                this.vy += 0.05; this.size -= 0.15; this.opacity -= 0.025;
+            animate();
+            
+            const fwCanvas = document.getElementById('firework-canvas');
+            const fwCtx = fwCanvas.getContext('2d');
+            let fireworks = [], fwParticles = [];
+            
+            function initFireworks() {
+                fwCanvas.width = window.innerWidth; fwCanvas.height = window.innerHeight;
+                animateFireworks();
+                setInterval(() => {
+                    if (document.getElementById('final-view').classList.contains('active')) createFirework();
+                }, 1000);
             }
-            draw() {
-                if (this.opacity <= 0 || this.size <= 0) return;
-                ctx.save(); ctx.globalAlpha = this.opacity; ctx.fillStyle = this.color;
-                ctx.translate(this.x, this.y); drawHeart(ctx, this.size); ctx.fill(); ctx.restore();
+            
+            function createFirework() {
+                fireworks.push({
+                    x: Math.random() * fwCanvas.width, y: fwCanvas.height,
+                    targetY: Math.random() * fwCanvas.height / 2,
+                    color: `hsl(${Math.random()*360},100%,50%)`, speed: 5
+                });
             }
-            get dead() { return this.opacity <= 0 || this.size <= 0; }
-        }
-
-        const fallHearts = Array.from({ length: 30 }, () => new FallHeart());
-        let trailHearts = [];
-
-        // 節流：每 30ms 最多生成一批
-        let lastTrail = 0;
-        function spawnTrail(x, y) {
-            const now = Date.now();
-            if (now - lastTrail < 30) return;
-            lastTrail = now;
-            for (let i = 0; i < 3; i++) trailHearts.push(new TrailHeart(x, y));
-        }
-
-        window.addEventListener('mousemove', e => spawnTrail(e.clientX, e.clientY));
-        window.addEventListener('touchmove', e => {
-            e.preventDefault();
-            Array.from(e.touches).forEach(t => spawnTrail(t.clientX, t.clientY));
-        }, { passive: false });
-
-        // 主渲染迴圈
-        function animate() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            fallHearts.forEach(h => { h.update(); h.draw(); });
-            trailHearts = trailHearts.filter(h => { h.update(); h.draw(); return !h.dead; });
-            requestAnimationFrame(animate);
-        }
-        animate();
-
-        // ── 煙火 ──────────────────────────────────────────────────
-        const fwCanvas = document.getElementById('firework-canvas');
-        const fwCtx = fwCanvas.getContext('2d');
-        let fireworks = [], fwParticles = [];
-
-        function initFireworks() {
-            fwCanvas.width = window.innerWidth; fwCanvas.height = window.innerHeight;
-            animateFireworks();
-            setInterval(() => {
-                if (document.getElementById('final-view').classList.contains('active')) createFirework();
-            }, 1000);
-        }
-        function createFirework() {
-            fireworks.push({
-                x: Math.random() * fwCanvas.width, y: fwCanvas.height,
-                targetY: Math.random() * fwCanvas.height / 2,
-                color: `hsl(${Math.random()*360},100%,50%)`, speed: 5
-            });
-        }
-        function explode(x, y, color) {
-            for (let i = 0; i < 50; i++) {
-                const a = Math.random() * Math.PI * 2, s = Math.random() * 4 + 2;
-                fwParticles.push({ x, y, color, vx: Math.cos(a)*s, vy: Math.sin(a)*s, alpha: 1, decay: Math.random()*0.015+0.01 });
+            
+            function explode(x, y, color) {
+                for (let i = 0; i < 50; i++) {
+                    const a = Math.random() * Math.PI * 2, s = Math.random() * 4 + 2;
+                    fwParticles.push({ x, y, color, vx: Math.cos(a)*s, vy: Math.sin(a)*s, alpha: 1, decay: Math.random()*0.015+0.01 });
+                }
             }
-        }
-        function animateFireworks() {
-            if (!document.getElementById('final-view').classList.contains('active')) return;
-            fwCtx.fillStyle = 'rgba(17,24,39,0.2)'; fwCtx.fillRect(0, 0, fwCanvas.width, fwCanvas.height);
-            fireworks.forEach((fw, i) => {
-                fw.y -= fw.speed;
-                fwCtx.beginPath(); fwCtx.arc(fw.x, fw.y, 2, 0, Math.PI*2);
-                fwCtx.fillStyle = fw.color; fwCtx.fill();
-                if (fw.y <= fw.targetY) { explode(fw.x, fw.y, fw.color); fireworks.splice(i, 1); }
-            });
-            fwParticles.forEach((p, i) => {
-                p.x += p.vx; p.y += p.vy; p.vy += 0.05; p.alpha -= p.decay;
-                fwCtx.save(); fwCtx.globalAlpha = p.alpha;
-                fwCtx.beginPath(); fwCtx.arc(p.x, p.y, 1.5, 0, Math.PI*2);
-                fwCtx.fillStyle = p.color; fwCtx.fill(); fwCtx.restore();
-                if (p.alpha <= 0) fwParticles.splice(i, 1);
-            });
-            requestAnimationFrame(animateFireworks);
+            
+            function animateFireworks() {
+                if (!document.getElementById('final-view').classList.contains('active')) return;
+                fwCtx.fillStyle = 'rgba(17,24,39,0.2)'; fwCtx.fillRect(0, 0, fwCanvas.width, fwCanvas.height);
+                fireworks.forEach((fw, i) => {
+                    fw.y -= fw.speed;
+                    fwCtx.beginPath(); fwCtx.arc(fw.x, fw.y, 2, 0, Math.PI*2);
+                    fwCtx.fillStyle = fw.color; fwCtx.fill();
+                    if (fw.y <= fw.targetY) { explode(fw.x, fw.y, fw.color); fireworks.splice(i, 1); }
+                });
+                fwParticles.forEach((p, i) => {
+                    p.x += p.vx; p.y += p.vy; p.vy += 0.05; p.alpha -= p.decay;
+                    fwCtx.save(); fwCtx.globalAlpha = p.alpha;
+                    fwCtx.beginPath(); fwCtx.arc(p.x, p.y, 1.5, 0, Math.PI*2);
+                    fwCtx.fillStyle = p.color; fwCtx.fill(); fwCtx.restore();
+                    if (p.alpha <= 0) fwParticles.splice(i, 1);
+                });
+                requestAnimationFrame(animateFireworks);
+            }
         }
     </script>
 </body>
